@@ -20,15 +20,6 @@ Just install the node module into your project from NPM
 npm install --save node-shntool
 ```
 
-### Running the tests
-
-If you want you can run the test from the installed directory to make sure it works.
-
-```
-cd node_modules/node-shntool
-npm test
-```
-
 ## Code Examples
 
 This is the first release of this interface, it is currently experimental.
