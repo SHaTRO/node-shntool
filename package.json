@@ -1,6 +1,6 @@
 {
   "name": "node-shntool",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Node interface to shntool (http://www.etree.org/shnutils/shntool/)",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,7 @@
     "CD"
   ],
   "author": "Steve Harris <github@aetrix.com>",
+  "repository" : "github:SHaTRO/node-shntool",
   "license": "MIT",
   "devDependencies": {
     "jest": "^22.1.4"
