@@ -59,5 +59,7 @@ typings/
 # dotenv environment variables file
 .env
 
-# testing files
-joined.wav
+# testing output files and artifacts
+__tests__/data/joined.wav
+__tests__/data/FLACTEST.wav
+

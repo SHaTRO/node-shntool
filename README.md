@@ -44,7 +44,9 @@ shntool.cuefile('prefix-*.wav').then(
       // each line of the CUE lines is available here
       console.log(cuelines.join('\n'));
   }
-);
+).catch( (err) => { 
+  // handle error
+});
 ```
 
 ### Create a Joined file
@@ -59,7 +61,25 @@ shntool.joined('prefix-*.wav', { destfile: 'joined.wav', dir: '.' }).then(
     // the joinedfile is actually on the file system at this point
     // if you combine the CUE file with the joined file you can burn a CD
   }
-);
+).catch( (err) => { 
+  // handle error
+});
+```
+
+### Convert FLAC Files
+
+The convert function is a promise.
+The result is an array of the target file paths as parsed from the conversion.  Currently only converting FLAC files to WAV files is supported (tested).
+
+```
+// note that the options here are actually the defaults so you can omit them
+shntool.convert('prefix-*.wav', { dir: '.' }).then(
+  function(convertedFiles) {
+    // convertedFiles is an array of file paths (the target files)
+  }
+).catch( (err) => { 
+  // handle error
+});
 ```
 
 ## License
