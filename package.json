@@ -1,6 +1,6 @@
 {
   "name": "node-shntool",
-  "version": "0.2.0",
+  "version": "0.2.0-alpha",
   "description": "Node interface to shntool (http://www.etree.org/shnutils/shntool/)",
   "main": "index.js",
   "scripts": {
