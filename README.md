@@ -23,7 +23,7 @@ npm install --save node-shntool
 ## Code Examples
 
 This is the first release of this interface, it is currently experimental.
-It currently supports 'CUE file' generation and joining files.
+It currently supports 'CUE file' generation, joining files, and rudimentary format conversion.
 The first argument to the promise calls is a string or list of strings used by the 'globby' module to locate the input files.
 The second argument to the promise calls is any options for the function itself.
 

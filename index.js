@@ -10,7 +10,7 @@ module.exports = function() {
         fs = require('fs-extra'),
         path = require('path'),
         globby = require('globby'),
-        through = require('through'),
+        through = require('through2'),
         util = require('util'),
         concat = require('concat-stream');
 
@@ -71,7 +71,7 @@ module.exports = function() {
         stream.on('error', callback);
 
         var curline = '';
-        function parseOutput(data){
+        function parseOutput(data, enc, cb){
             curline += data;
             var barelines = curline.split(/\r?\n/);
             curline = barelines.pop();
@@ -87,6 +87,7 @@ module.exports = function() {
                     return outfile.substr(1, outfile.length-2);
                 })));
             }
+            cb(null,data);
         }
         return stream;
     }
@@ -134,9 +135,10 @@ module.exports = function() {
         stream.on('end', callback);
         stream.on('error', callback);
 
-        function accumulateFile(data) {
+        function accumulateFile(data, enc, cb) {
             //console.log('accumulating');
             cuefile += data;
+            cb(null,data);
         }
         return stream;
     }
