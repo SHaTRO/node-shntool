@@ -31,7 +31,7 @@ The second argument to the promise calls is any options for the function itself.
 
 ```
 // TYPESCRIPT (async)
-import * as shntool from 'shntool';
+import * as shntool from 'node-shntool';
 
 // JAVASCRIPT (Promise)
 var shntool = require('node-shntool');
