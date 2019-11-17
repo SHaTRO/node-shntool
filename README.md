@@ -30,7 +30,11 @@ The second argument to the promise calls is any options for the function itself.
 ### Include the module
 
 ```
-var shntool = require('shntool');
+// TYPESCRIPT (async)
+import * as shntool from 'shntool';
+
+// JAVASCRIPT (Promise)
+var shntool = require('node-shntool');
 ```
 
 ### CUE File Generation
@@ -39,6 +43,11 @@ The cuefile function is a promise.
 The generated cue file result is an array of text lines.
 
 ```
+// TYPESCRIPT (async)
+const cuelines = await shntool.cuefile('prefix-*.wav');
+
+
+// JAVASCRIPT (Promise)
 shntool.cuefile('prefix-*.wav').then(
   function(cuelines) {
       // each line of the CUE lines is available here
@@ -56,6 +65,12 @@ The file path of the created file is the result.
 
 ```
 // note that the options here are actually the defaults so you can omit them
+
+// TYPESCRIPT (async)
+const joinfile = await shntool.joined('prefix-*.wav', { destfile: 'joined.wav', dir: '.' });
+
+
+// JAVASCRIPT (Promise)
 shntool.joined('prefix-*.wav', { destfile: 'joined.wav', dir: '.' }).then(
   function(joinedfile) {
     // the joinedfile is actually on the file system at this point
@@ -73,6 +88,12 @@ The result is an array of the target file paths as parsed from the conversion.  
 
 ```
 // note that the options here are actually the defaults so you can omit them
+
+// TYPESCRIPT (async)
+const convertedFiles = await shntool.convert('prefix-*.wav', { dir: '.' });
+
+
+// JAVASCRIPT (Promise)
 shntool.convert('prefix-*.wav', { dir: '.' }).then(
   function(convertedFiles) {
     // convertedFiles is an array of file paths (the target files)
