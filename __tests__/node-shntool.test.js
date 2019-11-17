@@ -2,7 +2,7 @@
 var path = require('path');
 var fs = require('fs');
 
-var shntool = require('..');
+var shntool = require('../dist');
 
 var DATA_DIR = './__tests__/data';
 
@@ -55,7 +55,7 @@ describe('test utility methods', () => {
     expect(joinedFile).toEqual(path.normalize(path.join(DATA_DIR, 'joined.wav')));
   });
 
-  it('verify wav file can be created', async () => {
+  it('verify converted wav file can be created', async () => {
     expect.assertions(2);
     var convertedFiles = await shntool.convert(DATA_DIR + '/FLACTEST.flac', { 
       fmt: 'wav'
