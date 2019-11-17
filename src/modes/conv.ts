@@ -1,13 +1,23 @@
 
-import { globby, shntool, through, promisify } from '../assemblies';
+import { globby, shntool, through, promisify, safeString } from '../assemblies';
+
+function parameters(src: string | readonly string[], opt: ConvOptions): ConvParameters {
+  opt = opt || {};
+  const outputType = safeString(opt.fmt) || 'wav';
+  const outputDirArgs = opt.dir ? ['-d', opt.dir] : [];
+  const args = ['conv', '-O', 'never', '-P', 'none', '-o', outputType];
+  args.push(...outputDirArgs);
+  const files = globby.sync(src) || [];
+  args.push(...files);
+  return {
+    args,
+    files,
+    outputType,
+  };
+}
 
 function convertService(src: string | readonly string[], opt: ConvOptions, cb: (err: Error, data?: string[]) => void): void {
-  opt = opt || {};
-  const outputType = opt.fmt || 'wav';
-  const outputDirArgs = opt.dir ? ['-d', opt.dir] : [];
-  const defaultargs = ['conv', '-O', 'never', '-P', 'none', '-o', outputType].concat(outputDirArgs);
-  const files = globby.sync(src);
-  const args = defaultargs.concat(files);
+  const { args, files } = parameters(src, opt);
   const outfiles = [];
   let errorline = 'unknown';
   let err = null;
@@ -31,6 +41,10 @@ function convertService(src: string | readonly string[], opt: ConvOptions, cb: (
     cb(null, data);
   }
 
+  if (files.length < 1) {
+    cb(new Error('no files match'));
+    return;
+  }
   const proc = shntool(args),
     output = through(parseOutput),
     stream = through(),

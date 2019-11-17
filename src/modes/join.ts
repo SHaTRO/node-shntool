@@ -1,14 +1,31 @@
 
-import { path, fs, globby, through, concat, shntool, promisify } from '../assemblies';
+import { path, fs, globby, through, concat, shntool, promisify, safeString } from '../assemblies';
 
-function joinService(src: string | readonly string[], opt: JoinOptions, cb: (err: Error, data?: string) => void): void {
+function parameters(src: string | readonly string[], opt: JoinOptions): JoinParameters {
   opt = opt || {};
-  let err = null;
   const joinfile = opt.dir ? path.join(opt.dir, 'joined.wav') : 'joined.wav';
   //console.log('joinfile: ' + joinfile);
   const destfile = opt.destfile ? opt.dir ? path.join(opt.dir, opt.destfile)
     : opt.destfile
     : joinfile;
+  const outputType = safeString(opt.fmt) || 'wav';
+  const outputDirArgs = opt.dir ? ['-d', opt.dir] : [];
+  const args = ['join', '-O', 'always', '-P', 'none', '-o', outputType, '-q'];
+  args.push(...outputDirArgs);
+  const files = globby.sync(src) || [];
+  args.push(...files);
+  return {
+    args,
+    files,
+    joinfile,
+    destfile,
+    outputType,
+  };
+}
+
+function joinService(src: string | readonly string[], opt: JoinOptions, cb: (err: Error, data?: string) => void): void {
+  const { joinfile, destfile, args, files } = parameters(src, opt);
+  let err = null;
   //console.log('destfile: ' + destfile);
 
   function callback(): void {
@@ -23,17 +40,10 @@ function joinService(src: string | readonly string[], opt: JoinOptions, cb: (err
     }
   }
 
-  const outputType = opt.fmt || 'wav';
-  const outputDirArgs = opt.dir ? ['-d', opt.dir] : [];
-  const defaultargs = ['join', '-O', 'always', '-P', 'none', '-o', outputType, '-q'].concat(outputDirArgs);
-  const files = globby.sync(src);
-  if (files == null || files.length < 1) {
+  if (files.length < 1) {
     cb(new Error('no files match'));
-    return null;
+    return;
   } else {
-    const args = defaultargs.concat(files);
-    //console.log('CMD = shntool ' + args.join(' '));
-
     const proc = shntool(args),
       output = through(),
       stream = through(),

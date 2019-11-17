@@ -1,11 +1,19 @@
 
 import { globby, shntool, through, concat, promisify } from '../assemblies';
 
-function cuefileService(src: string | readonly string[], opt: CueOptions, cb: (err: Error, data: string[]) => void): void {
+function parameters(src: string | readonly string[], opt: CueOptions): CueParameters {
   opt = opt || {};
-  const defaultargs = ['cue'];
-  const files = globby.sync(src);
-  const args = defaultargs.concat(files);
+  const args = ['cue'];
+  const files = globby.sync(src) || [];
+  args.push(...files);
+  return {
+    args,
+    files,
+  };
+}
+
+function cuefileService(src: string | readonly string[], opt: CueOptions, cb: (err: Error, data?: string[]) => void): void {
+  const { args, files } = parameters(src, opt);
   //console.log('CMD = shntool ' + args.join(' '));
   let cuefile = '';
   let err = null;
@@ -15,6 +23,10 @@ function cuefileService(src: string | readonly string[], opt: CueOptions, cb: (e
     cb(null, data);
   }
 
+  if (files.length < 1) {
+    cb(new Error('no files match'));
+    return;
+  }
   const proc = shntool(args),
     output = through(accumulateFile),
     stream = through(),
