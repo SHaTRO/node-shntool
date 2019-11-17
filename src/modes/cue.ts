@@ -1,0 +1,66 @@
+
+import { globby, shntool, through, concat, promisify } from '../assemblies';
+
+function parameters(src: string | readonly string[], opt: CueOptions): CueParameters {   // eslint-disable-line @typescript-eslint/no-unused-vars
+  opt = opt || {}
+  const args = ['cue'];
+  const files = globby.sync(src) || [];
+  args.push(...files);
+  return {
+    args,
+    files,
+  };
+}
+
+function cuefileService(src: string | readonly string[], opt: CueOptions, cb: (err: Error, data?: string[]) => void): void {
+  const { args, files } = parameters(src, opt);
+  //console.log('CMD = shntool ' + args.join(' '));
+  let cuefile = '';
+  let err = null;
+  function accumulateFile(data: Buffer, enc: string, cb: (err: Error, data: Buffer) => void): void {
+    //console.log('accumulating');
+    cuefile += data;
+    cb(null, data);
+  }
+
+  if (files.length < 1) {
+    cb(new Error('no files match'));
+    return;
+  }
+  const proc = shntool(args),
+    output = through(accumulateFile),
+    stream = through(),
+    error = concat();
+  proc.on('error', stream.emit.bind(stream, 'error'));
+  proc.stdout.pipe(output);
+  proc.stderr.pipe(error);
+  proc.on('close', function (code: number): void {
+    if (code === 0) {
+      //console.log('emitting: end');
+      stream.emit('end');
+    } else {
+      err = new Error(error.getBody().toString());
+      //console.log('emitting: error');
+      stream.emit('error');
+    }
+  });
+
+  function callback(): void {
+    //console.log('callback called');
+    const lines = cuefile
+      .split(/[\r\n]+/)
+      // .map(function(str) { return str.trim(); })
+      .filter(function (s) { return s; });
+    cb(err, lines);
+  }
+
+  stream.on('end', callback);
+  stream.on('error', callback);
+
+  return;
+}
+
+const cuePromise = promisify(cuefileService);
+export async function cuefile(src: string | readonly string[], opt?: CueOptions): Promise<string[]> {
+  return cuePromise(src, opt);
+}

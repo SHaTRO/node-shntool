@@ -1,11 +1,20 @@
 {
   "name": "node-shntool",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "description": "Node interface to shntool (http://www.etree.org/shnutils/shntool/)",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest --coverage",
-    "watch": "jest --coverage --watch"
+    "watch": "jest --coverage --watch",
+    "lint": "./node_modules/.bin/eslint src/**/*.ts",
+    "lint-fix": "./node_modules/.bin/eslint src/**/*.ts --fix",
+    "clean": "rm -rf ./dist/*",
+    "compile": "tsc",
+    "build": "npm install && npm run lint && npm run compile",
+    "rebuild": "npm run clean && npm run build",
+    "full-build": "npm run build && npm test",
+    "full-rebuild": "npm run rebuild && npm test"
   },
   "keywords": [
     "shntool",
@@ -18,12 +27,30 @@
   "repository": "github:SHaTRO/node-shntool",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^24.9.0"
+    "@types/jest": "^24.0.23",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
+    "eslint": "^6.6.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.7.2"
   },
   "dependencies": {
     "concat-stream": "^2.0.0",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
-    "through2": "^3.0.1"
+    "through2": "^3.0.1",
+    "util.promisify": "^1.0.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"
   }
 }
