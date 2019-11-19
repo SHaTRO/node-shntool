@@ -63,6 +63,7 @@ typings/
 .env
 
 # testing output files and artifacts
+__tests__/data/joined.cue
 __tests__/data/joined.wav
 __tests__/data/FLACTEST.wav
 

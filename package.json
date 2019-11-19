@@ -38,7 +38,6 @@
   },
   "dependencies": {
     "concat-stream": "^2.0.0",
-    "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "through2": "^3.0.1",
     "util.promisify": "^1.0.0"

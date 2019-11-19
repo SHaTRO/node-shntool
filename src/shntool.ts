@@ -1,6 +1,7 @@
 
 import * as cp from 'child_process';
-import { globby } from './external';
+import * as globby from 'globby';
+
 import { SUPPORTED_AUDIO_FILES } from './config';
 
 export function shntool(args: string[]): cp.ChildProcessWithoutNullStreams { 

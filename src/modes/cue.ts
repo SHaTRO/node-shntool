@@ -12,16 +12,27 @@ function parameters(src: string | readonly string[], opt: CueOptions): CueParame
   opt = opt || {}
   const args = ['cue'];
   const files = globby.sync(src) || [];
+  const destfile = opt.destfile ? path.normalize(opt.destfile) : undefined;
   args.push(...files);
   return {
     args,
     files,
+    destfile,
   };
 }
 
 function cuefileService(src: string | readonly string[], opt: CueOptions, cb: (err: Error, data?: string[]) => void): void {
-  const { args, files } = parameters(src, opt);
+  const { args, files, destfile } = parameters(src, opt);
   //console.log('CMD = shntool ' + args.join(' '));
+  if (destfile) {
+    try {
+      fs.accessSync(destfile, fs.constants.F_OK);
+      cb(new Error('destfile already exists'));
+      return;
+    } catch (err) {
+      // ignore error because we were checking existence
+    }
+  }
   let cuefile = '';
   let err = null;
   function accumulateFile(data: Buffer, enc: string, cb: (err: Error, data: Buffer) => void): void {
@@ -56,9 +67,14 @@ function cuefileService(src: string | readonly string[], opt: CueOptions, cb: (e
     //console.log('callback called');
     const lines = cuefile
       .split(/[\r\n]+/)
-      // .map(function(str) { return str.trim(); })
       .filter(function (s) { return s; });
-    cb(err, lines);
+    if (destfile && lines.length > 0) {
+      fs.writeFile(destfile, cuefile, (e) => {
+        cb(e, lines);
+      });
+    } else {
+      cb(err, lines);
+    }
   }
 
   stream.on('end', callback);
