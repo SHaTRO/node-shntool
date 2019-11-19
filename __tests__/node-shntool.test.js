@@ -27,6 +27,7 @@ describe('test utility methods', () => {
   beforeAll(() => {
     unlinkFile('joined.wav');
     unlinkFile('FLACTEST.wav');
+    unlinkFile('joined.cue');
   });
 
   it('verify testdata audio files exist', async () => {
@@ -45,6 +46,24 @@ describe('test utility methods', () => {
     expect(cuefile[1]).toContain('TRACK 01 AUDIO');
     expect(cuefile[2]).toContain('INDEX 01 0:00:00');
     expect(cuefile[8]).toContain('INDEX 01 1:43:09');
+  });
+
+  it('verify cuefile can be created and written', async () => {
+    expect.assertions(5);
+    var destfile = path.join(DATA_DIR, 'joined.cue');
+    var cuefile = await shntool.cuefile(DATA_DIR + '/*.wav', { destfile });
+    expect(cuefile[0]).toContain('joined.wav');
+    expect(cuefile[1]).toContain('TRACK 01 AUDIO');
+    expect(cuefile[2]).toContain('INDEX 01 0:00:00');
+    expect(cuefile[8]).toContain('INDEX 01 1:43:09');
+    var fileExists;
+    try {
+      fs.accessSync(destfile, fs.constants.F_OK);
+      fileExists = true;
+    } catch (e) {
+      fileExists = false;
+    }
+    expect(fileExists).toBeTruthy();
   });
 
   it('verify joined file can be created', async () => {

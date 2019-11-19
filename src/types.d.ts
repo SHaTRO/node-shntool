@@ -14,9 +14,11 @@ interface ConvParameters extends ServiceParameters {
 }
 
 interface CueOptions {
+  destfile?: string;
 }
 
 interface CueParameters extends ServiceParameters {
+  destfile: string;
 }
 
 interface JoinOptions {
