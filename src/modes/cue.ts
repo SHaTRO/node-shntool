@@ -1,5 +1,12 @@
 
-import { globby, shntool, through, concat, promisify } from '../assemblies';
+import * as concat from 'concat-stream';
+import * as fs from 'fs';
+import * as globby from 'globby';
+import * as path from 'path';
+import * as through from 'through2';
+import { promisify } from 'util';
+
+import { shntool } from '../shntool';
 
 function parameters(src: string | readonly string[], opt: CueOptions): CueParameters {   // eslint-disable-line @typescript-eslint/no-unused-vars
   opt = opt || {}

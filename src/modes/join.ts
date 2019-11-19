@@ -1,5 +1,13 @@
 
-import { path, fs, globby, through, concat, shntool, promisify, safeString } from '../assemblies';
+import * as concat from 'concat-stream';
+import * as fs from 'fs';
+import * as globby from 'globby';
+import * as path from 'path';
+import * as through from 'through2';
+import { promisify } from 'util';
+
+import { shntool } from '../shntool';
+import { safeString } from '../utils';
 
 function parameters(src: string | readonly string[], opt: JoinOptions): JoinParameters {
   opt = opt || {};
