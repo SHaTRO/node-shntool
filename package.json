@@ -1,6 +1,6 @@
 {
   "name": "node-shntool",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Node interface to shntool (http://www.etree.org/shnutils/shntool/)",
   "homepage": "https://github.com/SHaTRO/node-shntool#readme",
   "main": "dist/index.js",
