@@ -37,10 +37,28 @@ import * as shntool from 'node-shntool';
 var shntool = require('node-shntool');
 ```
 
+### List of Supported Audio files
+
+This service function returns a list of supported audio files, filtered from the supplied globby globs.
+
+```
+// TYPESCRIPT (async)
+const files = await shntool.audiofiles('path/to/files/*');
+
+// JAVASCRIPT (promise)
+shntool.audiofiles('path/to/files/*').then(
+  function(files) {
+    // files is an array of paths to supported audio files
+    console.log(filelist.join('\n'));
+  }
+).catch( (err) => {
+  // handle error
+});
+```
+
 ### CUE File Generation
 
-The cuefile function is a promise.
-The generated cue file result is an array of text lines.
+This service function result is an array of text lines.
 
 ```
 // TYPESCRIPT (async)
@@ -60,8 +78,7 @@ shntool.cuefile('prefix-*.wav').then(
 
 ### Create a Joined file
 
-The joined function is a promise.
-The file path of the created file is the result.
+This service function joins the specified files into a destination file.
 
 ```
 // note that the options here are actually the defaults so you can omit them
@@ -83,8 +100,10 @@ shntool.joined('prefix-*.wav', { destfile: 'joined.wav', dir: '.' }).then(
 
 ### Convert FLAC Files
 
-The convert function is a promise.
-The result is an array of the target file paths as parsed from the conversion.  Currently only converting FLAC files to WAV files is supported (tested).
+This service function converts the files specified as specified.
+
+The result is an array of the target file paths as parsed from the conversion.  
+Currently only converting FLAC files to WAV files is supported (tested).
 
 ```
 // note that the options here are actually the defaults so you can omit them
