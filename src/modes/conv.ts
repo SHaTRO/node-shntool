@@ -1,5 +1,10 @@
 
-import { globby, shntool, through, promisify, safeString } from '../assemblies';
+import * as globby from 'globby';
+import * as through from 'through2';
+import { promisify } from 'util';
+
+import { shntool } from '../shntool';
+import { safeString } from '../utils';
 
 function parameters(src: string | readonly string[], opt: ConvOptions): ConvParameters {
   opt = opt || {};
