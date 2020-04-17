@@ -10,7 +10,7 @@ This node module acts as a Node.js interface to that application.
 ## Getting Started
 
 You will need have installed the shntool software to use this module.
-It can be obtained here: http://www.etree.org/shnutils/shntool
+It can be obtained here: http://shnutils.freeshell.org/shntool/
 
 ### Installation
 
